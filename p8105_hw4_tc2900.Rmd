@@ -1,0 +1,43 @@
+---
+title: "p8105_hw4_tc2900"
+author: "Chen Shaoxuan"
+date: "10/24/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(rnoaa)
+library(ggridges)
+library(ggthemes)
+library(lubridate)
+library(DT)
+options(tibble.print_min = 10)
+```
+
+**In Problem 2, Shaoxuan Chen (tc2900) leads and Zenghui Xue (zx2231) collaborates. **
+
+#Part 1 imput data and tidy data
+```{r}
+ p_month_data = read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+  clean_names() %>% 
+  separate(mon, into = c("year","month","day"), sep = "-")
+print(p_month_data)
+ 
+# p_month_data = read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+ # clean_names() %>% 
+ #floor_date(mon, unit = c("year","month","day"))
+
+GDP_data = read_csv("./data/fivethirtyeight_datasets/GDP.csv") %>% 
+  clean_names() %>% 
+  separate(date, into = c("year","month","day"), sep = "-")
+print(GDP_data)
+
+```
+
