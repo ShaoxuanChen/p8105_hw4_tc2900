@@ -48,3 +48,15 @@ head(merge_data, 10)
 
 ```
 
+#Part 1 Plot data
+
+The following code chunk makes a bar plot showing the GDP_value over time, and color-coded by president.
+
+```{r plotting, message = FALSE, warning = FALSE}
+merge_data %>%
+  ggplot(aes(x = mon, y = as.numeric(GDP_value), color = president)) +
+  geom_bar(stat = "identity", aes(fill = president)) +
+  ylim(range(as.numeric(merge_data$GDP_value))) +
+  ylab("GDP value") +
+  xlab("Time")
+```
