@@ -25,19 +25,26 @@ options(tibble.print_min = 10)
 
 #Part 1 imput data and tidy data
 ```{r}
- p_month_data = read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+
+ p_month = data.frame(read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
   clean_names() %>% 
-  separate(mon, into = c("year","month","day"), sep = "-")
-print(p_month_data)
+  mutate(mon = floor_date(mon, unit = c("month")) ) )
  
 # p_month_data = read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
  # clean_names() %>% 
  #floor_date(mon, unit = c("year","month","day"))
 
-GDP_data = read_csv("./data/fivethirtyeight_datasets/GDP.csv") %>% 
+GDP_data = data.frame(read_csv("./data/fivethirtyeight_datasets/GDP.csv") %>% 
   clean_names() %>% 
-  separate(date, into = c("year","month","day"), sep = "-")
-print(GDP_data)
+  mutate(mon = floor_date(date, unit = c("month")) ) %>% 
+    select(-date))
+
+merge_data = data.frame(merge(GDP_data, p_month) %>%
+             na.omit() %>% 
+             rename("GDP_value" = "value") %>% 
+             mutate(president = ifelse(prez_dem == 1, "dem", "gop") ))
+head(merge_data, 10)
+  
 
 ```
 

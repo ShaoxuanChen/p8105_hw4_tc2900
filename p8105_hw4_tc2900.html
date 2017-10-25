@@ -127,9 +127,9 @@ $(document).ready(function () {
 <p><strong>In Problem 2, Shaoxuan Chen (tc2900) leads and Zenghui Xue (zx2231) collaborates. </strong></p>
 <div id="part-1-imput-data-and-tidy-data" class="section level1">
 <h1>Part 1 imput data and tidy data</h1>
-<pre class="r"><code> p_month_data = read_csv(&quot;./data/fivethirtyeight_datasets/pols-month.csv&quot;) %&gt;% 
+<pre class="r"><code> p_month = data.frame(read_csv(&quot;./data/fivethirtyeight_datasets/pols-month.csv&quot;) %&gt;% 
   clean_names() %&gt;% 
-  separate(mon, into = c(&quot;year&quot;,&quot;month&quot;,&quot;day&quot;), sep = &quot;-&quot;)</code></pre>
+  mutate(mon = floor_date(mon, unit = c(&quot;month&quot;)) ) )</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   mon = col_date(format = &quot;&quot;),
@@ -142,51 +142,24 @@ $(document).ready(function () {
 ##   sen_dem = col_integer(),
 ##   rep_dem = col_integer()
 ## )</code></pre>
-<pre><code>## Warning in format.POSIXlt(as.POSIXlt(x), ...): unknown timezone 'default/
-## America/New_York'</code></pre>
-<pre class="r"><code>print(p_month_data)</code></pre>
-<pre><code>## # A tibble: 822 x 11
-##     year month   day prez_gop gov_gop sen_gop rep_gop prez_dem gov_dem
-##  * &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;   &lt;int&gt;
-##  1  1947    01    15        0      23      51     253        1      23
-##  2  1947    02    15        0      23      51     253        1      23
-##  3  1947    03    15        0      23      51     253        1      23
-##  4  1947    04    15        0      23      51     253        1      23
-##  5  1947    05    15        0      23      51     253        1      23
-##  6  1947    06    15        0      23      51     253        1      23
-##  7  1947    07    15        0      23      51     253        1      23
-##  8  1947    08    15        0      23      51     253        1      23
-##  9  1947    09    15        0      23      51     253        1      23
-## 10  1947    10    15        0      23      51     253        1      23
-## # ... with 812 more rows, and 2 more variables: sen_dem &lt;int&gt;,
-## #   rep_dem &lt;int&gt;</code></pre>
+<pre><code>## Warning in as.POSIXct.POSIXlt(lt): unknown timezone 'default/America/
+## New_York'</code></pre>
 <pre class="r"><code># p_month_data = read_csv(&quot;./data/fivethirtyeight_datasets/pols-month.csv&quot;) %&gt;% 
  # clean_names() %&gt;% 
  #floor_date(mon, unit = c(&quot;year&quot;,&quot;month&quot;,&quot;day&quot;))
 
-GDP_data = read_csv(&quot;./data/fivethirtyeight_datasets/GDP.csv&quot;) %&gt;% 
+GDP_data = data.frame(read_csv(&quot;./data/fivethirtyeight_datasets/GDP.csv&quot;) %&gt;% 
   clean_names() %&gt;% 
-  separate(date, into = c(&quot;year&quot;,&quot;month&quot;,&quot;day&quot;), sep = &quot;-&quot;)</code></pre>
+  mutate(mon = floor_date(date, unit = c(&quot;month&quot;)) ) %&gt;% 
+    select(-date))</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   DATE = col_date(format = &quot;&quot;),
 ##   VALUE = col_character()
 ## )</code></pre>
-<pre class="r"><code>print(GDP_data)</code></pre>
-<pre><code>## # A tibble: 273 x 4
-##     year month   day    value
-##  * &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;
-##  1  1947    01    01        .
-##  2  1947    04    01        .
-##  3  1947    07    01        .
-##  4  1947    10    01        .
-##  5  1948    01    01  9.50226
-##  6  1948    04    01 10.79984
-##  7  1948    07    01 11.75530
-##  8  1948    10    01  7.83711
-##  9  1949    01    01  3.45605
-## 10  1949    04    01 -0.43972
-## # ... with 263 more rows</code></pre>
+<pre class="r"><code>merge_data = data.frame(merge(GDP_data, p_month) %&gt;% 
+rename(&quot;GDP_value&quot; = &quot;value&quot;) %&gt;% 
+  mutate(president = ifelse(prez_dem == 1, &quot;dem&quot;, &quot;gop&quot;) )) </code></pre>
 </div>
 
 
