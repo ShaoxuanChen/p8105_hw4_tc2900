@@ -48,15 +48,20 @@ head(merge_data, 10)
 
 ```
 
-#Part 1 Plot data
+#Part 2 Plot data
 
 The following code chunk makes a bar plot showing the GDP_value over time, and color-coded by president.
 
-```{r plotting, message = FALSE, warning = FALSE}
+```{r plotting, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 10}
 merge_data %>%
-  ggplot(aes(x = mon, y = as.numeric(GDP_value), color = president)) +
-  geom_bar(stat = "identity", aes(fill = president)) +
-  ylim(range(as.numeric(merge_data$GDP_value))) +
-  ylab("GDP value") +
-  xlab("Time")
+  ggplot(aes(x = mon, y = as.numeric(GDP_value), fill = president)) +
+    geom_bar(stat = "identity") +
+    ylim(range(as.numeric(merge_data$GDP_value))) +
+    ylab("GDP value") +
+    xlab("Time") +
+    scale_fill_manual(values = c("#0000FF", "#FF0000"), name = "president", breaks = c("dem", "gop"), labels = c("democratic", "republican")) +
+    theme_bw() +
+    theme(legend.position = "bottom")
 ```
+
+The result shoing the GDP values change over time from January 1948 to January 2015. I can see that GDP values are flutruating over time. In most of the years the GDP is positive while there are sitll some bad years with negative GDP. The highest two GDP values both occured with a democratic president, but the lowest two GDP values also happened under the rules of democratic presidents. I don't think there is enough information to conclude about the association between the parties and GDP values. 
